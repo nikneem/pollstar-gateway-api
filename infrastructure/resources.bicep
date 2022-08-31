@@ -68,6 +68,10 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
               secretRef: 'application-insights-connectionstring'
             }
             {
+              name: 'GATEWAY_VERSION'
+              value: containerVersion
+            }
+            {
               name: 'POLLSTAR_USERS_API'
               value: 'pollstar-users-api'
             }
