@@ -10,7 +10,6 @@ const daprSidecar = `http://localhost:${daprPort}`;
 /* GET order by calling order microservice via dapr */
 router.get("/", async function (req, res, next) {
   const targetUrl = `${daprSidecar}/api/users`;
-  console.log(JSON.stringify(req));
   console.log(`Service invoke to: ${targetUrl}`);
   var data = await axios.get(targetUrl, {
     headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
@@ -19,9 +18,8 @@ router.get("/", async function (req, res, next) {
   res.setHeader("Content-Type", "application/json");
   res.send(`${JSON.stringify(data.data)}`);
 });
-router.get("/*", async function (req, res, next) {
-  console.log(JSON.stringify(req));
-  const targetUrl = `${daprSidecar}/api/users`;
+router.get("/:id", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/users/${req.params.id}`;
   console.log(`Service invoke to: ${targetUrl}`);
   var data = await axios.get(targetUrl, {
     headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
