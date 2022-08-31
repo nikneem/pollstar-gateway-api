@@ -1,6 +1,5 @@
 param defaultResourceName string
 param location string
-param storageAccountTables array
 param containerVersion string
 
 param integrationResourceGroupName string
@@ -19,23 +18,6 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing
   scope: resourceGroup(integrationResourceGroupName)
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
-  name: uniqueString(defaultResourceName)
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-}
-resource storageAccountTableService 'Microsoft.Storage/storageAccounts/tableServices@2021-09-01' = {
-  name: 'default'
-  parent: storageAccount
-}
-resource storageAccountTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2021-09-01' = [for table in storageAccountTables: {
-  name: table
-  parent: storageAccountTableService
-}]
-
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: '${defaultResourceName}-aca'
   location: location
@@ -48,10 +30,6 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
     configuration: {
       activeRevisionsMode: 'Single'
       secrets: [
-        {
-          name: 'storage-account-secret'
-          value: listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value
-        }
         {
           name: 'application-insights-connectionstring'
           value: applicationInsights.properties.ConnectionString
@@ -80,14 +58,6 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
             memory: '0.5Gi'
           }
           env: [
-            {
-              name: 'Azure__StorageAccount'
-              value: storageAccount.name
-            }
-            {
-              name: 'Azure__StorageKey'
-              secretRef: 'storage-account-secret'
-            }
             {
               name: 'APPLICATION_INSIGHTS_CONNECTIONSTRING'
               secretRef: 'application-insights-connectionstring'

@@ -18,10 +18,6 @@ var applicationInsightsResourceName = '${integrationResourceGroupName}-ai'
 
 var apiResourceGroupName = toLower('${systemName}-${environmentName}-${locationAbbreviation}')
 
-var storageAccountTables = [
-  'users'
-]
-
 resource apiResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: apiResourceGroupName
   location: location
@@ -33,7 +29,6 @@ module resourcesModule 'resources.bicep' = {
   params: {
     defaultResourceName: apiResourceGroupName
     location: location
-    storageAccountTables: storageAccountTables
     containerVersion: containerVersion
     integrationResourceGroupName: integrationResourceGroupName
     containerAppEnvironmentResourceName: containerAppEnvironmentName
