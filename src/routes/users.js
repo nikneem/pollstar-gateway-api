@@ -1,21 +1,33 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const axios = require('axios').default;
-const serviceName = process.env.POLLSTAR_USERS_API || 'pollstar-users-api';
+const axios = require("axios").default;
+const serviceName = process.env.POLLSTAR_USERS_API || "pollstar-users-api";
 const daprPort = process.env.DAPR_HTTP_PORT || 80;
 
 //use dapr http proxy (header) to call orders service with normal /order route URL in axios.get call
-const daprSidecar = `http://localhost:${daprPort}`
+const daprSidecar = `http://localhost:${daprPort}`;
 
 /* GET order by calling order microservice via dapr */
-router.get('/', async function(req, res, next) {
-    const targetUrl = `${daprSidecar}/api/users`;
+router.get("/", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/users`;
+  console.log(JSON.stringify(req));
   console.log(`Service invoke to: ${targetUrl}`);
   var data = await axios.get(targetUrl, {
-    headers: {'dapr-app-id': `${serviceName}`} //sets app name for service discovery
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
   });
-  
-  res.setHeader('Content-Type', 'application/json');
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
+router.get("/*", async function (req, res, next) {
+  console.log(JSON.stringify(req));
+  const targetUrl = `${daprSidecar}/api/users`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
   res.send(`${JSON.stringify(data.data)}`);
 });
 
@@ -29,7 +41,7 @@ router.get('/', async function(req, res, next) {
 //     var data = await axios.post(`${daprSidecar}/order?id=${req.query.id}`, order, {
 //       headers: {'dapr-app-id': `${serviceName}`} //sets app name for service discovery
 //     });
-  
+
 //     res.send(`<p>Order created!</p><br/><code>${JSON.stringify(data.data)}</code>`);
 //   }
 //   catch(err){
@@ -39,11 +51,11 @@ router.get('/', async function(req, res, next) {
 
 // /* DELETE order by calling order microservice via dapr */
 // router.post('/delete', async function(req, res ) {
-   
+
 //   var data = await axios.delete(`${daprSidecar}/order?id=${req.body.id}`, {
 //     headers: {'dapr-app-id': `${serviceName}`}
 //   });
-  
+
 //   res.setHeader('Content-Type', 'application/json');
 //   res.send(`${JSON.stringify(data.data)}`);
 // });
