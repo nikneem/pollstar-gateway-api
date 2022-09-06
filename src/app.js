@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors(corsOptionsDelegate));
+//app.use(cors(corsOptionsDelegate));
 
 // expose the swagger.json OpenAPI definition
 app.use(express.static(path.join(__dirname, "open-api")));
@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, "open-api")));
 // Provide routes to different microservices
 app.use("/", indexRouter);
 app.use("/users", usersRoute);
-app.use("/sessions", sessionsRoute);
+//app.use("/sessions", sessionsRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

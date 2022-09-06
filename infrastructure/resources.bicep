@@ -46,6 +46,13 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
             latestRevision: true
           }
         ]
+        customDomains: [
+          {
+            name: 'pollstar-api.hexmaster.nl'
+            bindingType: 'SniEnabled'
+            certificateId: 'pollstar-api'
+          }
+        ]
       }
       dapr: {
         enabled: true
