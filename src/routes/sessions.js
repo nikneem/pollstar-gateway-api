@@ -28,6 +28,16 @@ router.get("/:code/details", async function (req, res, next) {
   res.setHeader("Content-Type", "application/json");
   res.send(`${JSON.stringify(data.data)}`);
 });
+router.get("/:code/polls", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/sessions/${req.params.code}/polls`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
 router.get("/:id/realtime", async function (req, res, next) {
   const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}/realtime`;
   console.log(`Service invoke to: ${targetUrl}`);
