@@ -36,7 +36,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
         }
       ]
       ingress: {
-        external: false
+        external: true
         targetPort: containerPort
         transport: 'auto'
         allowInsecure: false
