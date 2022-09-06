@@ -8,6 +8,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRoute = require("./routes/users");
 const sessionsRoute = require("./routes/sessions");
+const pollsRoute = require("./routes/polls");
 
 const whitelist = ["http://localhost:4200", "https://pollstar.hexmaster.nl"];
 const corsOptionsDelegate = (req, callback) => {
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, "open-api")));
 app.use("/", indexRouter);
 app.use("/users", usersRoute);
 app.use("/sessions", sessionsRoute);
+app.use("/polls", pollsRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
