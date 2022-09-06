@@ -9,7 +9,7 @@ const indexRouter = require("./routes/index");
 const usersRoute = require("./routes/users");
 const sessionsRoute = require("./routes/sessions");
 
-const allowlist = ["http://localhost:4200", "https://pollstar.hexmaster.nl"];
+const whitelist = ["http://localhost:4200", "https://pollstar.hexmaster.nl"];
 const corsOptionsDelegate = (req, callback) => {
   let corsOptions;
 
