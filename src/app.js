@@ -1,12 +1,29 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 
-var indexRouter = require("./routes/index");
-var usersRoute = require("./routes/users");
-var sessionsRoute = require("./routes/sessions");
+const indexRouter = require("./routes/index");
+const usersRoute = require("./routes/users");
+const sessionsRoute = require("./routes/sessions");
+
+const allowlist = ["http://localhost:4200", "https://pollstar.hexmaster.nl"];
+const corsOptionsDelegate = (req, callback) => {
+  let corsOptions;
+
+  let isDomainAllowed = whitelist.indexOf(req.header("Origin")) !== -1;
+
+  if (isDomainAllowed) {
+    // Enable CORS for this request
+    corsOptions = { origin: true };
+  } else {
+    // Disable CORS for this request
+    corsOptions = { origin: false };
+  }
+  callback(null, corsOptions);
+};
 
 const appPort = process.env.PORT || 3000;
 var app = express();
@@ -20,6 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors(corsOptionsDelegate));
 
 // expose the swagger.json OpenAPI definition
 app.use(express.static(path.join(__dirname, "open-api")));
