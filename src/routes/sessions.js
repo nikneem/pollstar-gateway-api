@@ -8,47 +8,7 @@ const daprPort = process.env.DAPR_HTTP_PORT || 80;
 //use dapr http proxy (header) to call orders service with normal /order route URL in axios.get call
 const daprSidecar = `http://localhost:${daprPort}`;
 
-router.get("/:id", async function (req, res, next) {
-  const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}?userId=${req.query.userId}`;
-  console.log(`Service invoke to: ${targetUrl}`);
-  var data = await axios.get(targetUrl, {
-    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
-  });
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(`${JSON.stringify(data.data)}`);
-});
-router.get("/:code/details", async function (req, res, next) {
-  const targetUrl = `${daprSidecar}/api/sessions/${req.params.code}/details/?userId=${req.query.userId}`;
-  console.log(`Service invoke to: ${targetUrl}`);
-  var data = await axios.get(targetUrl, {
-    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
-  });
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(`${JSON.stringify(data.data)}`);
-});
-router.get("/:code/polls", async function (req, res, next) {
-  const targetUrl = `${daprSidecar}/api/sessions/${req.params.code}/polls`;
-  console.log(`Service invoke to: ${targetUrl}`);
-  var data = await axios.get(targetUrl, {
-    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
-  });
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(`${JSON.stringify(data.data)}`);
-});
-router.get("/:id/realtime", async function (req, res, next) {
-  const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}/realtime`;
-  console.log(`Service invoke to: ${targetUrl}`);
-  var data = await axios.get(targetUrl, {
-    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
-  });
-
-  res.setHeader("Content-Type", "application/json");
-  res.send(`${JSON.stringify(data.data)}`);
-});
-// /* POST create order by calling order microservice via dapr */
+// POST > /sessions
 router.post("/", async function (req, res, next) {
   const session = req.body;
   const targetUrl = `${daprSidecar}/api/sessions`;
@@ -63,15 +23,52 @@ router.post("/", async function (req, res, next) {
   res.send(`${JSON.stringify(data.data)}`);
 });
 
-// /* DELETE order by calling order microservice via dapr */
-// router.post('/delete', async function(req, res ) {
+// GET > /sessions/{id}?userId={guid}
+router.get("/:id", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}?userId=${req.query.userId}`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
 
-//   var data = await axios.delete(`${daprSidecar}/order?id=${req.body.id}`, {
-//     headers: {'dapr-app-id': `${serviceName}`}
-//   });
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
 
-//   res.setHeader('Content-Type', 'application/json');
-//   res.send(`${JSON.stringify(data.data)}`);
-// });
+// GET > /sessions/{code}/details?userId={guid}
+router.get("/:code/details", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/sessions/${req.params.code}/details/?userId=${req.query.userId}`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
+
+// GET > /sessions/{id}/polls
+router.get("/:id/polls", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}/polls`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
+
+// GET > /sessions/{id}/realtime?userId={guid}
+router.get("/:id/realtime", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/sessions/${req.params.id}/realtime`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
 
 module.exports = router;
