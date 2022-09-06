@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const appInsights = require("applicationinsights");
 
 const indexRouter = require("./routes/index");
 const usersRoute = require("./routes/users");
@@ -25,6 +26,19 @@ const corsOptionsDelegate = (req, callback) => {
   }
   callback(null, corsOptions);
 };
+
+appInsights
+  .setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)
+  .setAutoDependencyCorrelation(false)
+  .setAutoCollectRequests(true)
+  .setAutoCollectPerformance(true, true)
+  .setAutoCollectExceptions(true)
+  .setAutoCollectDependencies(false)
+  .setAutoCollectConsole(true)
+  .setUseDiskRetryCaching(false)
+  .setSendLiveMetrics(false)
+  .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
+  .start();
 
 const appPort = process.env.PORT || 3000;
 var app = express();

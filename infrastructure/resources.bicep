@@ -71,7 +71,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
           }
           env: [
             {
-              name: 'APPLICATION_INSIGHTS_CONNECTIONSTRING'
+              name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               secretRef: 'application-insights-connectionstring'
             }
             {
