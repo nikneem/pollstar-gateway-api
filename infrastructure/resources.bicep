@@ -86,6 +86,10 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
               name: 'POLLSTAR_SESSIONS_API'
               value: 'pollstar-sessions-api'
             }
+            {
+              name: 'POLLSTAR_POLLS_API'
+              value: 'pollstar-polls-api'
+            }
           ]
 
         }

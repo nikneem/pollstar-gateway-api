@@ -24,7 +24,7 @@ router.post("/", async function (req, res, next) {
 
 // GET > /polls/{id}
 router.get("/", async function (req, res, next) {
-  const targetUrl = `${daprSidecar}/api/polls?sessionId=${req.query.sessionId}`;
+  const targetUrl = `${daprSidecar}/api/polls?session-id=${req.query.sessionId}`;
   console.log(`Service invoke to: ${targetUrl}`);
   var data = await axios.get(targetUrl, {
     headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
