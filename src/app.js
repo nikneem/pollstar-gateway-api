@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-//app.use(cors(corsOptionsDelegate));
+app.use(cors(corsOptionsDelegate));
 
 // expose the swagger.json OpenAPI definition
 app.use(express.static(path.join(__dirname, "open-api")));
