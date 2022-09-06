@@ -50,7 +50,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
           {
             name: 'pollstar-api.hexmaster.nl'
             bindingType: 'SniEnabled'
-            certificateId: 'pollstar-api'
+            certificateId: '${containerAppEnvironments}/certificates/pollstar-api'
           }
         ]
       }
