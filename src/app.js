@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, "open-api")));
 // Provide routes to different microservices
 app.use("/", indexRouter);
 app.use("/users", usersRoute);
-//app.use("/sessions", sessionsRoute);
+app.use("/sessions", sessionsRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
