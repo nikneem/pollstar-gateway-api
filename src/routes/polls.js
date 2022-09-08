@@ -46,6 +46,30 @@ router.get("/:id", async function (req, res, next) {
   res.send(`${JSON.stringify(data.data)}`);
 });
 
+// PUT > /polls/{id}
+router.put("/:id", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/polls/${req.params.id}`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.put(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
+
+// DELETE > /polls/{id}
+router.delete("/:id", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/api/polls/${req.params.id}`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.defaults(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
+
 // GET > /polls/{id}/activate
 router.get("/:id/activate", async function (req, res, next) {
   const targetUrl = `${daprSidecar}/api/polls/${req.params.id}/activate`;
