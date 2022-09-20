@@ -8,6 +8,16 @@ const daprPort = process.env.DAPR_HTTP_PORT || 80;
 const daprSidecar = `http://localhost:${daprPort}`;
 
 /* GET order by calling order microservice via dapr */
+router.get("/health", async function (req, res, next) {
+  const targetUrl = `${daprSidecar}/health`;
+  console.log(`Service invoke to: ${targetUrl}`);
+  var data = await axios.get(targetUrl, {
+    headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
+  });
+
+  res.setHeader("Content-Type", "application/json");
+  res.send(`${JSON.stringify(data.data)}`);
+});
 router.get("/", async function (req, res, next) {
   const targetUrl = `${daprSidecar}/api/users`;
   console.log(`Service invoke to: ${targetUrl}`);
