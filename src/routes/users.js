@@ -14,10 +14,10 @@ router.get("/health", async function (req, res, next) {
   var data = await axios.get(targetUrl, {
     headers: { "dapr-app-id": `${serviceName}` }, //sets app name for service discovery
   });
-
   res.setHeader("Content-Type", "application/json");
   res.send(`${JSON.stringify(data.data)}`);
 });
+
 router.get("/", async function (req, res, next) {
   const targetUrl = `${daprSidecar}/api/users`;
   console.log(`Service invoke to: ${targetUrl}`);
