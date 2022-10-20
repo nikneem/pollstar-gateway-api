@@ -33,5 +33,6 @@ module resourcesModule 'resources.bicep' = {
     integrationResourceGroupName: integrationResourceGroupName
     containerAppEnvironmentResourceName: containerAppEnvironmentName
     applicationInsightsResourceName: applicationInsightsResourceName
+    environmentName: environmentName
   }
 }
